@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<h1>User</h1>
+<form action="#" method="POST">
+    <input type="discipline" name="discipline" placeholder="Enter your Discipline" value="{{discipline if discipline}}"/>
+    <input type="courses" name="courses" placeholder="Enter your Courses" value="{{courses if courses}}"/>
+    <input type="submit" value="submit"/>
+</form>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<h1>Events</h1>
+
+{% for k,v in content.items()%}
+<p>Title {{k}} : Link <a href={{v}}>{{v}}</a></p>
+{%endfor%}
+
+{% endblock %}
