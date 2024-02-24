@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from events import Events
 from course_info import main
+from resourcesAPI import getTextBookLinks
 
 app = Flask(__name__)
 app.secret_key = "secretKey4us"
@@ -24,23 +25,26 @@ def user():
         if request.method == "POST":
             discipline = request.form["discipline"]
             courses = request.form['courses']
+            session["discipline"] = discipline
+            session["courses"] = courses.split(',')
+            
         else:
             if "discipline" in session:
                 discipline = session["discipline"]
                 
-        return render_template("user.html", discipline=discipline, courses=courses)
+        return render_template("user.html", discipline=session["discipline"], courses=session["courses"])
     else:
         return redirect(url_for("login"))
 
 @app.route("/resources/")
 def resources():
-    books_list = []
+    books_list = {} # Dictionary of dictionaries of links with title as key for each course as the main key
     if "discipline" in session:
         for course in session["courses"]:
-            books = main(course)
-            books_list += [books]
-            print(books_list)
-        return render_template("resources.html", content=books_list)
+            book_links = getTextBookLinks(main(course)) # Dictionary of links with title as key
+            books_list[course] = book_links
+        #return books_list
+        return render_template("resources.html", booksByCourses=books_list, courses=session["courses"])
         
     else:
         return redirect(url_for("login"))
